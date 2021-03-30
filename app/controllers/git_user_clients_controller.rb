@@ -1,4 +1,9 @@
 class GitUserClientsController < ApplicationController
+
+    def index 
+        @git_user_clients = GitUserClient.where(client_id: @client)
+    end 
+    
     def create 
         git_user_client_params = params.permit(:client_id, :git_user_id)
         @git_user_client = GitUserClient.create(git_user_client_params)

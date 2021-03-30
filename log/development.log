@@ -212,3 +212,103 @@ Processing by ClientsController#show as HTML
 Completed 200 OK in 3ms (Views: 0.7ms | ActiveRecord: 0.4ms | Allocations: 710)
 
 
+Started GET "/clients/ninjacat" for ::1 at 2021-03-30 17:55:07 -0400
+  [1m[35m (2.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by ClientsController#show as */*
+  Parameters: {"username"=>"ninjacat"}
+  [1m[36mClient Load (3.0ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE (ninjacat) LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/clients_controller.rb:25:in `find_client'
+Completed 500 Internal Server Error in 17ms (ActiveRecord: 3.0ms | Allocations: 2960)
+
+
+  
+ActiveRecord::StatementInvalid (PG::UndefinedColumn: ERROR:  column "ninjacat" does not exist
+LINE 1: SELECT "clients".* FROM "clients" WHERE (ninjacat) LIMIT $1
+                                                 ^
+):
+  
+app/controllers/clients_controller.rb:25:in `find_client'
+Started GET "/clients/ninjacat" for ::1 at 2021-03-30 17:57:47 -0400
+Processing by ClientsController#show as */*
+  Parameters: {"username"=>"ninjacat"}
+  [1m[36mClient Load (1.0ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE (ninjacat) LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/clients_controller.rb:25:in `find_client'
+Completed 500 Internal Server Error in 5ms (ActiveRecord: 1.0ms | Allocations: 2073)
+
+
+  
+ActiveRecord::StatementInvalid (PG::UndefinedColumn: ERROR:  column "ninjacat" does not exist
+LINE 1: SELECT "clients".* FROM "clients" WHERE (ninjacat) LIMIT $1
+                                                 ^
+):
+  
+app/controllers/clients_controller.rb:25:in `find_client'
+Started GET "/clients/ninjacat" for ::1 at 2021-03-30 17:59:29 -0400
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+ActionController::RoutingError (No route matches [GET] "/clients/ninjacat"):
+  
+Started GET "/clients/search?q=ninjacat" for ::1 at 2021-03-30 18:00:33 -0400
+  
+ActionController::RoutingError (No route matches [GET] "/clients/search"):
+  
+Started GET "/clients/search?q=%22ninjacat%22" for ::1 at 2021-03-30 18:00:47 -0400
+  
+ActionController::RoutingError (No route matches [GET] "/clients/search"):
+  
+  [1m[36mClient Load (1.3ms)[0m  [1m[34mSELECT "clients".* FROM "clients" ORDER BY "clients"."id" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[36mClient Load (0.8ms)[0m  [1m[34mSELECT "clients".* FROM "clients" ORDER BY "clients"."id" DESC LIMIT $1[0m  [["LIMIT", 1]]
+Started POST "/git_users" for ::1 at 2021-03-30 19:36:45 -0400
+Processing by GitUsersController#create as JSON
+  Parameters: {"github_id"=>651237, "login"=>"evanlh", "name"=>"Evan Lawrence-Hurt", "avatar_url"=>"https://avatars.githubusercontent.com/u/651237?v=4", "bio"=>nil, "location"=>"Brooklyn, NY", "site_admin"=>false, "hireable"=>nil, "public_repos"=>35, "followers"=>21, "following"=>18, "git_user"=>{"github_id"=>651237, "login"=>"evanlh", "name"=>"Evan Lawrence-Hurt", "avatar_url"=>"https://avatars.githubusercontent.com/u/651237?v=4", "bio"=>nil, "location"=>"Brooklyn, NY", "site_admin"=>false, "hireable"=>nil, "public_repos"=>35, "followers"=>21, "following"=>18}}
+[31mUnpermitted parameter: :git_user[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+  [1m[36mGitUser Create (5.9ms)[0m  [1m[32mINSERT INTO "git_users" ("github_id", "login", "name", "avatar_url", "location", "site_admin", "public_repos", "followers", "following", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["github_id", 651237], ["login", "evanlh"], ["name", "Evan Lawrence-Hurt"], ["avatar_url", "https://avatars.githubusercontent.com/u/651237?v=4"], ["location", "Brooklyn, NY"], ["site_admin", false], ["public_repos", 35], ["followers", 21], ["following", 18], ["created_at", "2021-03-30 23:36:45.967431"], ["updated_at", "2021-03-30 23:36:45.967431"]]
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+  [1m[36mTRANSACTION (2.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+[active_model_serializers]   [1m[36mRepository Load (6.0ms)[0m  [1m[34mSELECT "repositories".* FROM "repositories" WHERE "repositories"."git_user_id" = $1[0m  [["git_user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/git_users_controller.rb:9:in `create'
+[active_model_serializers]   [1m[36mClient Load (2.6ms)[0m  [1m[34mSELECT "clients".* FROM "clients" INNER JOIN "git_user_clients" ON "clients"."id" = "git_user_clients"."client_id" WHERE "git_user_clients"."git_user_id" = $1[0m  [["git_user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/git_users_controller.rb:9:in `create'
+[active_model_serializers] Rendered GitUserSerializer with ActiveModelSerializers::Adapter::Attributes (103.85ms)
+Completed 200 OK in 224ms (Views: 135.1ms | ActiveRecord: 39.7ms | Allocations: 29520)
+
+
+  [1m[36mGitUser Load (0.4ms)[0m  [1m[34mSELECT "git_users".* FROM "git_users" ORDER BY "git_users"."id" DESC LIMIT $1[0m  [["LIMIT", 1]]
+Started GET "/clients/ninjacat" for ::1 at 2021-03-30 19:48:05 -0400
+Processing by ClientsController#index as */*
+  Parameters: {"username"=>"ninjacat"}
+  [1m[36mClient Load (2.3ms)[0m  [1m[34mSELECT "clients".* FROM "clients"[0m
+  ↳ app/controllers/clients_controller.rb:6:in `index'
+[active_model_serializers]   [1m[36mGitUserClient Load (0.6ms)[0m  [1m[34mSELECT "git_user_clients".* FROM "git_user_clients" WHERE "git_user_clients"."client_id" = $1[0m  [["client_id", 1]]
+[active_model_serializers]   ↳ app/controllers/clients_controller.rb:7:in `index'
+[active_model_serializers] Rendered ClientSerializer with ActiveModelSerializers::Adapter::Attributes (13.55ms)
+Completed 200 OK in 93ms (Views: 18.7ms | ActiveRecord: 19.6ms | Allocations: 9970)
+
+
+Started GET "/clients/ninjacat" for ::1 at 2021-03-30 19:49:23 -0400
+Processing by ClientsController#index as */*
+  Parameters: {"username"=>"ninjacat"}
+  [1m[36mClient Load (0.2ms)[0m  [1m[34mSELECT "clients".* FROM "clients"[0m
+  ↳ app/controllers/clients_controller.rb:6:in `index'
+[active_model_serializers]   [1m[36mGitUserClient Load (0.8ms)[0m  [1m[34mSELECT "git_user_clients".* FROM "git_user_clients" WHERE "git_user_clients"."client_id" = $1[0m  [["client_id", 1]]
+[active_model_serializers]   ↳ app/controllers/clients_controller.rb:7:in `index'
+[active_model_serializers] Rendered ClientSerializer with ActiveModelSerializers::Adapter::Attributes (15.74ms)
+Completed 200 OK in 44ms (Views: 16.1ms | ActiveRecord: 14.8ms | Allocations: 8257)
+
+
+Started GET "/clients/ninjacat" for ::1 at 2021-03-30 19:50:10 -0400
+Processing by ClientsController#index as */*
+  Parameters: {"username"=>"ninjacat"}
+  [1m[36mClient Load (0.4ms)[0m  [1m[34mSELECT "clients".* FROM "clients"[0m
+  ↳ app/controllers/clients_controller.rb:7:in `index'
+[active_model_serializers]   [1m[36mGitUserClient Load (6.7ms)[0m  [1m[34mSELECT "git_user_clients".* FROM "git_user_clients" WHERE "git_user_clients"."client_id" = $1[0m  [["client_id", 2]]
+[active_model_serializers]   ↳ app/controllers/clients_controller.rb:7:in `index'
+[active_model_serializers]   [1m[36mGitUserClient Load (0.6ms)[0m  [1m[34mSELECT "git_user_clients".* FROM "git_user_clients" WHERE "git_user_clients"."client_id" = $1[0m  [["client_id", 1]]
+[active_model_serializers]   ↳ app/controllers/clients_controller.rb:7:in `index'
+[active_model_serializers] Rendered ActiveModel::Serializer::CollectionSerializer with ActiveModelSerializers::Adapter::Attributes (28.89ms)
+Completed 200 OK in 94ms (Views: 65.3ms | ActiveRecord: 23.1ms | Allocations: 9551)
+
+

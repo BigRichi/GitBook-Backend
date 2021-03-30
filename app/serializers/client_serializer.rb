@@ -1,3 +1,4 @@
 class ClientSerializer < ActiveModel::Serializer
   attributes :id, :first_name, :last_name, :location, :username
+  has_many :git_user_clients
 end
