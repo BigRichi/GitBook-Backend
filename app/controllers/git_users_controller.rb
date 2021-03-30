@@ -5,7 +5,7 @@ class GitUsersController < ApplicationController
     end
 
     def create 
-        @git_user = GitUser.create()
+        @git_user = GitUser.create(git_user_params)
         render json: @git_user
     end 
 
