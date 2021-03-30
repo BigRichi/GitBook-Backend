@@ -1,5 +1,5 @@
 class ClientsController < ApplicationController
-    before_action :find_post, only: [:show, :update]
+    before_action :find_client, only: [:show, :update]
     
     def create 
         @client = Client.create(client_params)
@@ -18,7 +18,7 @@ class ClientsController < ApplicationController
     private 
 
     def client_params
-        params.permit(:first_name, :last_name, :location)
+        params.permit(:first_name, :last_name, :username, :location)
     end
 
     def find_client
