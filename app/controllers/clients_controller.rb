@@ -1,5 +1,5 @@
 class ClientsController < ApplicationController
-    before_action :find_client, only: [:show, :update]
+    before_action :find_client, only: [:login, :update]
     
     def create 
         @client = Client.create(client_params)
@@ -7,8 +7,7 @@ class ClientsController < ApplicationController
     end 
 
     def login 
-        @client = Client.all.select{|c| c.username == params[:username]}[0]
-        render json: @client
+       
     end
 
     def update 
@@ -23,6 +22,7 @@ class ClientsController < ApplicationController
     end
 
     def find_client
-        @client = Client.find_by(params[:username])
+        @client = Client.find_by(username: params[:username])
+        render json: @client
     end
 end
