@@ -1,19 +1,13 @@
 class ClientsController < ApplicationController
     before_action :find_client, only: [:show, :update]
-    def index 
-        @clients = Client.all
-        if @clients 
-            @client = @clients.select{|c| c.username == params[:username]}[0]
-            render json: @clients
-        end
-    end 
-
+    
     def create 
         @client = Client.create(client_params)
         render json: @client
     end 
 
-    def show 
+    def login 
+        @client = Client.all.select{|c| c.username == params[:username]}[0]
         render json: @client
     end
 
@@ -30,6 +24,5 @@ class ClientsController < ApplicationController
 
     def find_client
         @client = Client.find_by(params[:username])
-        byebug
     end
 end

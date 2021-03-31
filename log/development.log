@@ -312,3 +312,51 @@ Processing by ClientsController#index as */*
 Completed 200 OK in 94ms (Views: 65.3ms | ActiveRecord: 23.1ms | Allocations: 9551)
 
 
+Started GET "/clients/ninjacat" for ::1 at 2021-03-30 20:23:20 -0400
+Processing by ClientsController#show as */*
+  Parameters: {"username"=>"ninjacat"}
+  [1m[36mClient Load (1.8ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE (ninjacat) LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/clients_controller.rb:33:in `find_client'
+Completed 500 Internal Server Error in 27ms (ActiveRecord: 10.5ms | Allocations: 4093)
+
+
+  
+ActiveRecord::StatementInvalid (PG::UndefinedColumn: ERROR:  column "ninjacat" does not exist
+LINE 1: SELECT "clients".* FROM "clients" WHERE (ninjacat) LIMIT $1
+                                                 ^
+):
+  
+app/controllers/clients_controller.rb:33:in `find_client'
+Started GET "/clients/ninjacat" for ::1 at 2021-03-30 20:24:42 -0400
+Processing by ClientsController#index as */*
+  Parameters: {"username"=>"ninjacat"}
+  [1m[36mClient Load (1.5ms)[0m  [1m[34mSELECT "clients".* FROM "clients"[0m
+  ↳ app/controllers/clients_controller.rb:6:in `index'
+[active_model_serializers]   [1m[36mGitUserClient Load (1.3ms)[0m  [1m[34mSELECT "git_user_clients".* FROM "git_user_clients" WHERE "git_user_clients"."client_id" = $1[0m  [["client_id", 1]]
+[active_model_serializers]   ↳ app/controllers/clients_controller.rb:7:in `index'
+[active_model_serializers] Rendered ClientSerializer with ActiveModelSerializers::Adapter::Attributes (12.05ms)
+Completed 200 OK in 37ms (Views: 11.4ms | ActiveRecord: 14.2ms | Allocations: 8436)
+
+
+Started GET "/clients/ninjacat" for ::1 at 2021-03-30 20:30:44 -0400
+Processing by ClientsController#index as */*
+  Parameters: {"username"=>"ninjacat"}
+  [1m[36mClient Load (0.6ms)[0m  [1m[34mSELECT "clients".* FROM "clients"[0m
+  ↳ app/controllers/clients_controller.rb:6:in `index'
+[active_model_serializers]   [1m[36mGitUserClient Load (1.1ms)[0m  [1m[34mSELECT "git_user_clients".* FROM "git_user_clients" WHERE "git_user_clients"."client_id" = $1[0m  [["client_id", 1]]
+[active_model_serializers]   ↳ app/controllers/clients_controller.rb:7:in `index'
+[active_model_serializers] Rendered ClientSerializer with ActiveModelSerializers::Adapter::Attributes (4.64ms)
+Completed 200 OK in 36ms (Views: 4.0ms | ActiveRecord: 15.8ms | Allocations: 3763)
+
+
+Started GET "/clients/ninjacat" for ::1 at 2021-03-30 20:32:36 -0400
+Processing by ClientsController#beef as */*
+  Parameters: {"username"=>"ninjacat"}
+  [1m[36mClient Load (0.4ms)[0m  [1m[34mSELECT "clients".* FROM "clients"[0m
+  ↳ app/controllers/clients_controller.rb:17:in `beef'
+[active_model_serializers]   [1m[36mGitUserClient Load (1.2ms)[0m  [1m[34mSELECT "git_user_clients".* FROM "git_user_clients" WHERE "git_user_clients"."client_id" = $1[0m  [["client_id", 1]]
+[active_model_serializers]   ↳ app/controllers/clients_controller.rb:18:in `beef'
+[active_model_serializers] Rendered ClientSerializer with ActiveModelSerializers::Adapter::Attributes (11.27ms)
+Completed 200 OK in 49ms (Views: 11.8ms | ActiveRecord: 10.8ms | Allocations: 8311)
+
+
