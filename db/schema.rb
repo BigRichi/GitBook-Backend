@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 2021_03_29_212003) do
   create_table "repositories", force: :cascade do |t|
     t.bigint "git_user_id", null: false
     t.integer "repo_id"
+    t.string "name"
     t.string "description"
     t.string "html_url"
     t.string "language"
@@ -63,6 +64,7 @@ ActiveRecord::Schema.define(version: 2021_03_29_212003) do
     t.datetime "last_commit_date"
     t.integer "watchers"
     t.integer "stargazers_count"
+    t.datetime "repo_creation"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["git_user_id"], name: "index_repositories_on_git_user_id"

@@ -1,5 +1,4 @@
 class GitUserClientSerializer < ActiveModel::Serializer
-  attributes :id
-  has_one :client
-  has_one :git_user
+  attributes :id, :git_user_id
+  belongs_to :git_user
 end

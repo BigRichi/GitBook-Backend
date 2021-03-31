@@ -17,7 +17,7 @@ class GitUsersController < ApplicationController
     private 
 
     def git_user_params
-        params.permit(:github_id, :login, :name, :avatar_url, :bio, :location, :site_admin, :hireable, :public_repos, :followers, :following)
+        params.permit(:github_id, :login, :name, :avatar_url, :bio, :location, :site_admin, :hireable, :public_repos, :repos_url, :followers, :following)
     end
 
     def find_git_user
