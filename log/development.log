@@ -748,3 +748,148 @@ Processing by GitUsersController#create as JSON
 Completed 200 OK in 63ms (Views: 29.7ms | ActiveRecord: 11.2ms | Allocations: 16013)
 
 
+Started POST "/git_users" for ::1 at 2021-03-31 11:11:09 -0400
+  [1m[35m (1.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by GitUsersController#create as JSON
+  Parameters: {"github_id"=>8907035, "login"=>"BrendaMichelle", "name"=>"Michelle Rios", "avatar_url"=>"https://avatars.githubusercontent.com/u/8907035?v=4", "bio"=>nil, "location"=>"NYC", "site_admin"=>false, "hireable"=>true, "public_repos"=>72, "followers"=>25, "following"=>22, "git_user"=>{"github_id"=>8907035, "login"=>"BrendaMichelle", "name"=>"Michelle Rios", "avatar_url"=>"https://avatars.githubusercontent.com/u/8907035?v=4", "bio"=>nil, "location"=>"NYC", "site_admin"=>false, "hireable"=>true, "public_repos"=>72, "followers"=>25, "following"=>22}}
+[31mUnpermitted parameter: :git_user[0m
+  [1m[36mGitUser Load (1.1ms)[0m  [1m[34mSELECT "git_users".* FROM "git_users" WHERE "git_users"."github_id" = $1 AND "git_users"."login" = $2 AND "git_users"."name" = $3 AND "git_users"."avatar_url" = $4 AND "git_users"."bio" IS NULL AND "git_users"."location" = $5 AND "git_users"."site_admin" = $6 AND "git_users"."hireable" = $7 AND "git_users"."public_repos" = $8 AND "git_users"."followers" = $9 AND "git_users"."following" = $10 LIMIT $11[0m  [["github_id", 8907035], ["login", "BrendaMichelle"], ["name", "Michelle Rios"], ["avatar_url", "https://avatars.githubusercontent.com/u/8907035?v=4"], ["location", "NYC"], ["site_admin", false], ["hireable", true], ["public_repos", 72], ["followers", 25], ["following", 22], ["LIMIT", 1]]
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+  [1m[36mGitUser Create (0.6ms)[0m  [1m[32mINSERT INTO "git_users" ("github_id", "login", "name", "avatar_url", "location", "site_admin", "hireable", "public_repos", "followers", "following", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["github_id", 8907035], ["login", "BrendaMichelle"], ["name", "Michelle Rios"], ["avatar_url", "https://avatars.githubusercontent.com/u/8907035?v=4"], ["location", "NYC"], ["site_admin", false], ["hireable", true], ["public_repos", 72], ["followers", 25], ["following", 22], ["created_at", "2021-03-31 15:11:09.970518"], ["updated_at", "2021-03-31 15:11:09.970518"]]
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+  [1m[36mTRANSACTION (1.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+[active_model_serializers]   [1m[36mRepository Load (0.6ms)[0m  [1m[34mSELECT "repositories".* FROM "repositories" WHERE "repositories"."git_user_id" = $1[0m  [["git_user_id", 2]]
+[active_model_serializers]   ↳ app/controllers/git_users_controller.rb:9:in `create'
+[active_model_serializers]   [1m[36mClient Load (0.9ms)[0m  [1m[34mSELECT "clients".* FROM "clients" INNER JOIN "git_user_clients" ON "clients"."id" = "git_user_clients"."client_id" WHERE "git_user_clients"."git_user_id" = $1[0m  [["git_user_id", 2]]
+[active_model_serializers]   ↳ app/controllers/git_users_controller.rb:9:in `create'
+[active_model_serializers] Rendered GitUserSerializer with ActiveModelSerializers::Adapter::Attributes (37.17ms)
+Completed 200 OK in 94ms (Views: 48.1ms | ActiveRecord: 16.4ms | Allocations: 26591)
+
+
+Started POST "/git_user_clients" for ::1 at 2021-03-31 11:11:54 -0400
+Processing by GitUserClientsController#create as JSON
+  Parameters: {"git_user_id"=>"2", "git_user_client"=>{"git_user_id"=>"2"}}
+[31mUnpermitted parameter: :git_user_client[0m
+  [1m[36mGitUserClient Load (0.4ms)[0m  [1m[34mSELECT "git_user_clients".* FROM "git_user_clients" WHERE "git_user_clients"."git_user_id" = $1 LIMIT $2[0m  [["git_user_id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/git_user_clients_controller.rb:9:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/git_user_clients_controller.rb:9:in `create'
+  [1m[36mGitUser Load (0.2ms)[0m  [1m[34mSELECT "git_users".* FROM "git_users" WHERE "git_users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/git_user_clients_controller.rb:9:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/git_user_clients_controller.rb:9:in `create'
+[active_model_serializers] Rendered GitUserClientSerializer with ActiveModelSerializers::Adapter::Attributes (1.3ms)
+Completed 200 OK in 28ms (Views: 6.1ms | ActiveRecord: 2.1ms | Allocations: 7262)
+
+
+Started GET "/clients/ninjacat" for ::1 at 2021-03-31 11:12:11 -0400
+Processing by ClientsController#login as */*
+  Parameters: {"username"=>"ninjacat"}
+  [1m[36mClient Load (0.2ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."username" = $1 LIMIT $2[0m  [["username", "ninjacat"], ["LIMIT", 1]]
+  ↳ app/controllers/clients_controller.rb:25:in `find_client'
+[active_model_serializers]   [1m[36mGitUserClient Load (0.4ms)[0m  [1m[34mSELECT "git_user_clients".* FROM "git_user_clients" WHERE "git_user_clients"."client_id" = $1[0m  [["client_id", 1]]
+[active_model_serializers]   ↳ app/controllers/clients_controller.rb:26:in `find_client'
+[active_model_serializers] Rendered ClientSerializer with ActiveModelSerializers::Adapter::Attributes (2.62ms)
+Filter chain halted as :find_client rendered or redirected
+Completed 200 OK in 11ms (Views: 3.9ms | ActiveRecord: 0.6ms | Allocations: 5417)
+
+
+Started POST "/git_user_clients" for ::1 at 2021-03-31 11:12:17 -0400
+Processing by GitUserClientsController#create as JSON
+  Parameters: {"client_id"=>"1", "git_user_id"=>"2", "git_user_client"=>{"client_id"=>"1", "git_user_id"=>"2"}}
+[31mUnpermitted parameter: :git_user_client[0m
+  [1m[36mGitUserClient Load (1.3ms)[0m  [1m[34mSELECT "git_user_clients".* FROM "git_user_clients" WHERE "git_user_clients"."client_id" = $1 AND "git_user_clients"."git_user_id" = $2 LIMIT $3[0m  [["client_id", 1], ["git_user_id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/git_user_clients_controller.rb:9:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/git_user_clients_controller.rb:9:in `create'
+  [1m[36mClient Load (0.2ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/git_user_clients_controller.rb:9:in `create'
+  [1m[36mGitUser Load (0.3ms)[0m  [1m[34mSELECT "git_users".* FROM "git_users" WHERE "git_users"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/git_user_clients_controller.rb:9:in `create'
+  [1m[36mGitUserClient Create (2.9ms)[0m  [1m[32mINSERT INTO "git_user_clients" ("client_id", "git_user_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["client_id", 1], ["git_user_id", 2], ["created_at", "2021-03-31 15:12:17.820941"], ["updated_at", "2021-03-31 15:12:17.820941"]]
+  ↳ app/controllers/git_user_clients_controller.rb:9:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/git_user_clients_controller.rb:9:in `create'
+[active_model_serializers] Rendered GitUserClientSerializer with ActiveModelSerializers::Adapter::Attributes (1.33ms)
+Completed 200 OK in 17ms (Views: 2.0ms | ActiveRecord: 5.3ms | Allocations: 4909)
+
+
+Started GET "/clients/ninjacat" for ::1 at 2021-03-31 11:12:52 -0400
+Processing by ClientsController#login as */*
+  Parameters: {"username"=>"ninjacat"}
+  [1m[36mClient Load (0.5ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."username" = $1 LIMIT $2[0m  [["username", "ninjacat"], ["LIMIT", 1]]
+  ↳ app/controllers/clients_controller.rb:25:in `find_client'
+[active_model_serializers]   [1m[36mGitUserClient Load (0.6ms)[0m  [1m[34mSELECT "git_user_clients".* FROM "git_user_clients" WHERE "git_user_clients"."client_id" = $1[0m  [["client_id", 1]]
+[active_model_serializers]   ↳ app/controllers/clients_controller.rb:26:in `find_client'
+[active_model_serializers] Rendered ClientSerializer with ActiveModelSerializers::Adapter::Attributes (2.66ms)
+Filter chain halted as :find_client rendered or redirected
+Completed 200 OK in 5ms (Views: 2.5ms | ActiveRecord: 1.1ms | Allocations: 1801)
+
+
+Started POST "/git_users" for ::1 at 2021-03-31 11:13:04 -0400
+Processing by GitUsersController#create as JSON
+  Parameters: {"github_id"=>8907035, "login"=>"BrendaMichelle", "name"=>"Michelle Rios", "avatar_url"=>"https://avatars.githubusercontent.com/u/8907035?v=4", "bio"=>"This is my bio", "location"=>"NYC", "site_admin"=>false, "hireable"=>true, "public_repos"=>72, "repos_url"=>"https://api.github.com/users/BrendaMichelle/repos", "followers"=>25, "following"=>22, "git_user"=>{"github_id"=>8907035, "login"=>"BrendaMichelle", "name"=>"Michelle Rios", "avatar_url"=>"https://avatars.githubusercontent.com/u/8907035?v=4", "bio"=>"This is my bio", "location"=>"NYC", "site_admin"=>false, "hireable"=>true, "public_repos"=>72, "repos_url"=>"https://api.github.com/users/BrendaMichelle/repos", "followers"=>25, "following"=>22}}
+[31mUnpermitted parameters: :repos_url, :git_user[0m
+  [1m[36mGitUser Load (0.3ms)[0m  [1m[34mSELECT "git_users".* FROM "git_users" WHERE "git_users"."github_id" = $1 AND "git_users"."login" = $2 AND "git_users"."name" = $3 AND "git_users"."avatar_url" = $4 AND "git_users"."bio" = $5 AND "git_users"."location" = $6 AND "git_users"."site_admin" = $7 AND "git_users"."hireable" = $8 AND "git_users"."public_repos" = $9 AND "git_users"."followers" = $10 AND "git_users"."following" = $11 LIMIT $12[0m  [["github_id", 8907035], ["login", "BrendaMichelle"], ["name", "Michelle Rios"], ["avatar_url", "https://avatars.githubusercontent.com/u/8907035?v=4"], ["bio", "This is my bio"], ["location", "NYC"], ["site_admin", false], ["hireable", true], ["public_repos", 72], ["followers", 25], ["following", 22], ["LIMIT", 1]]
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+  [1m[36mGitUser Create (0.6ms)[0m  [1m[32mINSERT INTO "git_users" ("github_id", "login", "name", "avatar_url", "bio", "location", "site_admin", "hireable", "public_repos", "followers", "following", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING "id"[0m  [["github_id", 8907035], ["login", "BrendaMichelle"], ["name", "Michelle Rios"], ["avatar_url", "https://avatars.githubusercontent.com/u/8907035?v=4"], ["bio", "This is my bio"], ["location", "NYC"], ["site_admin", false], ["hireable", true], ["public_repos", 72], ["followers", 25], ["following", 22], ["created_at", "2021-03-31 15:13:04.308641"], ["updated_at", "2021-03-31 15:13:04.308641"]]
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+[active_model_serializers]   [1m[36mRepository Load (0.2ms)[0m  [1m[34mSELECT "repositories".* FROM "repositories" WHERE "repositories"."git_user_id" = $1[0m  [["git_user_id", 3]]
+[active_model_serializers]   ↳ app/controllers/git_users_controller.rb:9:in `create'
+[active_model_serializers]   [1m[36mClient Load (0.4ms)[0m  [1m[34mSELECT "clients".* FROM "clients" INNER JOIN "git_user_clients" ON "clients"."id" = "git_user_clients"."client_id" WHERE "git_user_clients"."git_user_id" = $1[0m  [["git_user_id", 3]]
+[active_model_serializers]   ↳ app/controllers/git_users_controller.rb:9:in `create'
+[active_model_serializers] Rendered GitUserSerializer with ActiveModelSerializers::Adapter::Attributes (3.9ms)
+Completed 200 OK in 13ms (Views: 3.7ms | ActiveRecord: 2.3ms | Allocations: 5188)
+
+
+Started GET "/clients/ninjacat" for ::1 at 2021-03-31 11:57:09 -0400
+Processing by ClientsController#login as */*
+  Parameters: {"username"=>"ninjacat"}
+  [1m[36mClient Load (1.6ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."username" = $1 LIMIT $2[0m  [["username", "ninjacat"], ["LIMIT", 1]]
+  ↳ app/controllers/clients_controller.rb:25:in `find_client'
+[active_model_serializers]   [1m[36mGitUserClient Load (3.5ms)[0m  [1m[34mSELECT "git_user_clients".* FROM "git_user_clients" WHERE "git_user_clients"."client_id" = $1[0m  [["client_id", 1]]
+[active_model_serializers]   ↳ app/controllers/clients_controller.rb:26:in `find_client'
+[active_model_serializers] Rendered ClientSerializer with ActiveModelSerializers::Adapter::Attributes (9.14ms)
+Filter chain halted as :find_client rendered or redirected
+Completed 200 OK in 37ms (Views: 6.6ms | ActiveRecord: 16.0ms | Allocations: 3829)
+
+
+Started GET "/clients/ninjacat" for ::1 at 2021-03-31 11:58:11 -0400
+Processing by ClientsController#login as */*
+  Parameters: {"username"=>"ninjacat"}
+  [1m[36mClient Load (0.2ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."username" = $1 LIMIT $2[0m  [["username", "ninjacat"], ["LIMIT", 1]]
+  ↳ app/controllers/clients_controller.rb:25:in `find_client'
+[active_model_serializers]   [1m[36mGitUserClient Load (0.3ms)[0m  [1m[34mSELECT "git_user_clients".* FROM "git_user_clients" WHERE "git_user_clients"."client_id" = $1[0m  [["client_id", 1]]
+[active_model_serializers]   ↳ app/controllers/clients_controller.rb:26:in `find_client'
+[active_model_serializers] Rendered ClientSerializer with ActiveModelSerializers::Adapter::Attributes (2.44ms)
+Filter chain halted as :find_client rendered or redirected
+Completed 200 OK in 5ms (Views: 2.5ms | ActiveRecord: 0.6ms | Allocations: 1724)
+
+
+Started POST "/git_users" for ::1 at 2021-03-31 11:58:55 -0400
+Processing by GitUsersController#create as JSON
+  Parameters: {"github_id"=>38410005, "login"=>"nicholasdegrate", "name"=>"Nicholas Degrate", "avatar_url"=>"https://avatars.githubusercontent.com/u/38410005?v=4", "bio"=>nil, "location"=>nil, "site_admin"=>false, "hireable"=>nil, "public_repos"=>153, "repos_url"=>"https://api.github.com/users/nicholasdegrate/repos", "followers"=>3, "following"=>3, "git_user"=>{"github_id"=>38410005, "login"=>"nicholasdegrate", "name"=>"Nicholas Degrate", "avatar_url"=>"https://avatars.githubusercontent.com/u/38410005?v=4", "bio"=>nil, "location"=>nil, "site_admin"=>false, "hireable"=>nil, "public_repos"=>153, "repos_url"=>"https://api.github.com/users/nicholasdegrate/repos", "followers"=>3, "following"=>3}}
+[31mUnpermitted parameters: :repos_url, :git_user[0m
+  [1m[36mGitUser Load (0.6ms)[0m  [1m[34mSELECT "git_users".* FROM "git_users" WHERE "git_users"."github_id" = $1 AND "git_users"."login" = $2 AND "git_users"."name" = $3 AND "git_users"."avatar_url" = $4 AND "git_users"."bio" IS NULL AND "git_users"."location" IS NULL AND "git_users"."site_admin" = $5 AND "git_users"."hireable" IS NULL AND "git_users"."public_repos" = $6 AND "git_users"."followers" = $7 AND "git_users"."following" = $8 LIMIT $9[0m  [["github_id", 38410005], ["login", "nicholasdegrate"], ["name", "Nicholas Degrate"], ["avatar_url", "https://avatars.githubusercontent.com/u/38410005?v=4"], ["site_admin", false], ["public_repos", 153], ["followers", 3], ["following", 3], ["LIMIT", 1]]
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+  [1m[36mGitUser Create (1.6ms)[0m  [1m[32mINSERT INTO "git_users" ("github_id", "login", "name", "avatar_url", "site_admin", "public_repos", "followers", "following", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING "id"[0m  [["github_id", 38410005], ["login", "nicholasdegrate"], ["name", "Nicholas Degrate"], ["avatar_url", "https://avatars.githubusercontent.com/u/38410005?v=4"], ["site_admin", false], ["public_repos", 153], ["followers", 3], ["following", 3], ["created_at", "2021-03-31 15:58:55.238409"], ["updated_at", "2021-03-31 15:58:55.238409"]]
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+  [1m[36mTRANSACTION (1.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+[active_model_serializers]   [1m[36mRepository Load (1.2ms)[0m  [1m[34mSELECT "repositories".* FROM "repositories" WHERE "repositories"."git_user_id" = $1[0m  [["git_user_id", 4]]
+[active_model_serializers]   ↳ app/controllers/git_users_controller.rb:9:in `create'
+[active_model_serializers]   [1m[36mClient Load (1.0ms)[0m  [1m[34mSELECT "clients".* FROM "clients" INNER JOIN "git_user_clients" ON "clients"."id" = "git_user_clients"."client_id" WHERE "git_user_clients"."git_user_id" = $1[0m  [["git_user_id", 4]]
+[active_model_serializers]   ↳ app/controllers/git_users_controller.rb:9:in `create'
+[active_model_serializers] Rendered GitUserSerializer with ActiveModelSerializers::Adapter::Attributes (9.68ms)
+Completed 200 OK in 23ms (Views: 8.4ms | ActiveRecord: 5.7ms | Allocations: 5167)
+
+
