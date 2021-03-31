@@ -2,7 +2,7 @@ class ClientsController < ApplicationController
     before_action :find_client, only: [:login, :update]
     
     def create 
-        @client = Client.create(client_params)
+        @client = Client.find_or_create_by(client_params)
         render json: @client
     end 
 
