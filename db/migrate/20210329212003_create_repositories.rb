@@ -9,6 +9,7 @@ class CreateRepositories < ActiveRecord::Migration[6.1]
       t.integer :size
       t.integer :forks_count
       t.integer :commits
+      t.string :events_url
       t.datetime :last_commit_date
       t.integer :watchers
       t.integer :stargazers_count

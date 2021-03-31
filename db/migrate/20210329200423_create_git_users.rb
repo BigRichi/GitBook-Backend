@@ -10,6 +10,7 @@ class CreateGitUsers < ActiveRecord::Migration[6.1]
       t.boolean :site_admin
       t.boolean :hireable
       t.integer :public_repos
+      t.string :repos_url
       t.integer :followers
       t.integer :following
 

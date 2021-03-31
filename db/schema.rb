@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 2021_03_29_212003) do
     t.boolean "site_admin"
     t.boolean "hireable"
     t.integer "public_repos"
+    t.string "repos_url"
     t.integer "followers"
     t.integer "following"
     t.datetime "created_at", precision: 6, null: false
@@ -58,6 +59,7 @@ ActiveRecord::Schema.define(version: 2021_03_29_212003) do
     t.integer "size"
     t.integer "forks_count"
     t.integer "commits"
+    t.string "events_url"
     t.datetime "last_commit_date"
     t.integer "watchers"
     t.integer "stargazers_count"

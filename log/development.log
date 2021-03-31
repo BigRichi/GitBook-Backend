@@ -428,3 +428,323 @@ Filter chain halted as :find_client rendered or redirected
 Completed 200 OK in 24ms (Views: 7.3ms | ActiveRecord: 6.0ms | Allocations: 8338)
 
 
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT pg_try_advisory_lock(4869053397680650290)[0m
+  [1m[35m (3.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateGitUsers (20210329200423)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (17.8ms)[0m  [1m[35mDROP TABLE "git_users"[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT pg_advisory_unlock(4869053397680650290)[0m
+  [1m[35m (1.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.6ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (40.4ms)[0m  [1m[35mDROP DATABASE IF EXISTS "gitbook_development"[0m
+  [1m[35m (46.5ms)[0m  [1m[35mDROP DATABASE IF EXISTS "gitbook_test"[0m
+  [1m[35m (188.6ms)[0m  [1m[35mCREATE DATABASE "gitbook_development" ENCODING = 'unicode'[0m
+  [1m[35m (93.9ms)[0m  [1m[35mCREATE DATABASE "gitbook_test" ENCODING = 'unicode'[0m
+  [1m[35mSQL (2.9ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "clients" CASCADE[0m
+  [1m[35m (20.1ms)[0m  [1m[35mCREATE TABLE "clients" ("id" bigserial primary key, "first_name" character varying, "last_name" character varying, "location" character varying, "username" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "git_user_clients" CASCADE[0m
+  [1m[35m (3.2ms)[0m  [1m[35mCREATE TABLE "git_user_clients" ("id" bigserial primary key, "client_id" bigint NOT NULL, "git_user_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (2.1ms)[0m  [1m[35mCREATE INDEX "index_git_user_clients_on_client_id" ON "git_user_clients" ("client_id")[0m
+  [1m[35m (1.7ms)[0m  [1m[35mCREATE INDEX "index_git_user_clients_on_git_user_id" ON "git_user_clients" ("git_user_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "git_users" CASCADE[0m
+  [1m[35m (7.6ms)[0m  [1m[35mCREATE TABLE "git_users" ("id" bigserial primary key, "github_id" integer, "login" character varying, "name" character varying, "avatar_url" character varying, "bio" character varying, "location" character varying, "site_admin" boolean, "hireable" boolean, "public_repos" integer, "followers" integer, "following" integer, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.5ms)[0m  [1m[35mDROP TABLE IF EXISTS "repositories" CASCADE[0m
+  [1m[35m (3.7ms)[0m  [1m[35mCREATE TABLE "repositories" ("id" bigserial primary key, "git_user_id" bigint NOT NULL, "repo_id" integer, "description" character varying, "html_url" character varying, "language" character varying, "size" integer, "forks_count" integer, "commits" integer, "last_commit_date" timestamp, "watchers" integer, "stargazers_count" integer, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (1.5ms)[0m  [1m[35mCREATE INDEX "index_repositories_on_git_user_id" ON "repositories" ("git_user_id")[0m
+  [1m[35m (5.5ms)[0m  [1m[35mALTER TABLE "git_user_clients" ADD CONSTRAINT "fk_rails_455a451382"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (1.0ms)[0m  [1m[35mALTER TABLE "git_user_clients" ADD CONSTRAINT "fk_rails_60b7d992ef"
+FOREIGN KEY ("git_user_id")
+  REFERENCES "git_users" ("id")
+[0m
+  [1m[35m (1.4ms)[0m  [1m[35mALTER TABLE "repositories" ADD CONSTRAINT "fk_rails_3d49481a60"
+FOREIGN KEY ("git_user_id")
+  REFERENCES "git_users" ("id")
+[0m
+  [1m[35m (3.1ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (2.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20210329212003)[0m
+  [1m[35m (0.9ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20210329200209),
+(20210329200423),
+(20210329201133);
+
+[0m
+  [1m[35m (4.5ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (1.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2021-03-31 14:34:20.139196"], ["updated_at", "2021-03-31 14:34:20.139196"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "schema_sha1"], ["value", "cf643fd64c401488e8257cffa19e3d17ff389205"], ["created_at", "2021-03-31 14:34:20.149113"], ["updated_at", "2021-03-31 14:34:20.149113"]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35mSQL (0.4ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "clients" CASCADE[0m
+  [1m[35m (7.0ms)[0m  [1m[35mCREATE TABLE "clients" ("id" bigserial primary key, "first_name" character varying, "last_name" character varying, "location" character varying, "username" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.6ms)[0m  [1m[35mDROP TABLE IF EXISTS "git_user_clients" CASCADE[0m
+  [1m[35m (1.8ms)[0m  [1m[35mCREATE TABLE "git_user_clients" ("id" bigserial primary key, "client_id" bigint NOT NULL, "git_user_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (1.7ms)[0m  [1m[35mCREATE INDEX "index_git_user_clients_on_client_id" ON "git_user_clients" ("client_id")[0m
+  [1m[35m (1.2ms)[0m  [1m[35mCREATE INDEX "index_git_user_clients_on_git_user_id" ON "git_user_clients" ("git_user_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "git_users" CASCADE[0m
+  [1m[35m (3.9ms)[0m  [1m[35mCREATE TABLE "git_users" ("id" bigserial primary key, "github_id" integer, "login" character varying, "name" character varying, "avatar_url" character varying, "bio" character varying, "location" character varying, "site_admin" boolean, "hireable" boolean, "public_repos" integer, "followers" integer, "following" integer, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.7ms)[0m  [1m[35mDROP TABLE IF EXISTS "repositories" CASCADE[0m
+  [1m[35m (4.9ms)[0m  [1m[35mCREATE TABLE "repositories" ("id" bigserial primary key, "git_user_id" bigint NOT NULL, "repo_id" integer, "description" character varying, "html_url" character varying, "language" character varying, "size" integer, "forks_count" integer, "commits" integer, "last_commit_date" timestamp, "watchers" integer, "stargazers_count" integer, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (1.9ms)[0m  [1m[35mCREATE INDEX "index_repositories_on_git_user_id" ON "repositories" ("git_user_id")[0m
+  [1m[35m (2.2ms)[0m  [1m[35mALTER TABLE "git_user_clients" ADD CONSTRAINT "fk_rails_455a451382"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (2.6ms)[0m  [1m[35mALTER TABLE "git_user_clients" ADD CONSTRAINT "fk_rails_60b7d992ef"
+FOREIGN KEY ("git_user_id")
+  REFERENCES "git_users" ("id")
+[0m
+  [1m[35m (2.4ms)[0m  [1m[35mALTER TABLE "repositories" ADD CONSTRAINT "fk_rails_3d49481a60"
+FOREIGN KEY ("git_user_id")
+  REFERENCES "git_users" ("id")
+[0m
+  [1m[35m (3.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20210329212003)[0m
+  [1m[35m (0.7ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20210329200209),
+(20210329200423),
+(20210329201133);
+
+[0m
+  [1m[35m (2.3ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.6ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2021-03-31 14:34:20.254855"], ["updated_at", "2021-03-31 14:34:20.254855"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Update (1.8ms)[0m  [1m[33mUPDATE "ar_internal_metadata" SET "value" = $1, "updated_at" = $2 WHERE "ar_internal_metadata"."key" = $3[0m  [["value", "test"], ["updated_at", "2021-03-31 14:34:20.260311"], ["key", "environment"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.5ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "schema_sha1"], ["value", "cf643fd64c401488e8257cffa19e3d17ff389205"], ["created_at", "2021-03-31 14:34:20.267763"], ["updated_at", "2021-03-31 14:34:20.267763"]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_try_advisory_lock(4869053397680650290)[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateGitUsers (20210329200423)
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (2.8ms)[0m  [1m[35mDROP TABLE "git_users"[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_advisory_unlock(4869053397680650290)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_try_advisory_lock(4869053397680650290)[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateGitUserClients (20210329201133)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (5.0ms)[0m  [1m[35mDROP TABLE "git_user_clients"[0m
+  [1m[36mActiveRecord::SchemaMigration Destroy (0.5ms)[0m  [1m[31mDELETE FROM "schema_migrations" WHERE "schema_migrations"."version" = $1[0m  [["version", "20210329201133"]]
+  [1m[36mTRANSACTION (4.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT pg_advisory_unlock(4869053397680650290)[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_try_advisory_lock(4869053397680650290)[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateGitUsers (20210329200423)
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (2.4ms)[0m  [1m[35mDROP TABLE "git_users"[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_advisory_unlock(4869053397680650290)[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT pg_try_advisory_lock(4869053397680650290)[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateRepositories (20210329212003)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (2.2ms)[0m  [1m[35mDROP TABLE "repositories"[0m
+  [1m[36mActiveRecord::SchemaMigration Destroy (0.7ms)[0m  [1m[31mDELETE FROM "schema_migrations" WHERE "schema_migrations"."version" = $1[0m  [["version", "20210329212003"]]
+  [1m[36mTRANSACTION (4.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT pg_advisory_unlock(4869053397680650290)[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT pg_try_advisory_lock(4869053397680650290)[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateGitUsers (20210329200423)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (1.6ms)[0m  [1m[35mDROP TABLE "git_users"[0m
+  [1m[36mActiveRecord::SchemaMigration Destroy (0.7ms)[0m  [1m[31mDELETE FROM "schema_migrations" WHERE "schema_migrations"."version" = $1[0m  [["version", "20210329200423"]]
+  [1m[36mTRANSACTION (4.0ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT pg_advisory_unlock(4869053397680650290)[0m
+  [1m[35m (1.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT pg_try_advisory_lock(4869053397680650290)[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateGitUsers (20210329200423)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (4.3ms)[0m  [1m[35mCREATE TABLE "git_users" ("id" bigserial primary key, "github_id" integer, "login" character varying, "name" character varying, "avatar_url" character varying, "bio" character varying, "location" character varying, "site_admin" boolean, "hireable" boolean, "public_repos" integer, "repos_url" character varying, "followers" integer, "following" integer, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20210329200423"]]
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateGitUserClients (20210329201133)
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (9.0ms)[0m  [1m[35mCREATE TABLE "git_user_clients" ("id" bigserial primary key, "client_id" bigint NOT NULL, "git_user_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_455a451382"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+, CONSTRAINT "fk_rails_60b7d992ef"
+FOREIGN KEY ("git_user_id")
+  REFERENCES "git_users" ("id")
+)[0m
+  [1m[35m (2.1ms)[0m  [1m[35mCREATE INDEX "index_git_user_clients_on_client_id" ON "git_user_clients" ("client_id")[0m
+  [1m[35m (1.2ms)[0m  [1m[35mCREATE INDEX "index_git_user_clients_on_git_user_id" ON "git_user_clients" ("git_user_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20210329201133"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateRepositories (20210329212003)
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (5.7ms)[0m  [1m[35mCREATE TABLE "repositories" ("id" bigserial primary key, "git_user_id" bigint NOT NULL, "repo_id" integer, "description" character varying, "html_url" character varying, "language" character varying, "size" integer, "forks_count" integer, "commits" integer, "events_url" character varying, "last_commit_date" timestamp, "watchers" integer, "stargazers_count" integer, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_3d49481a60"
+FOREIGN KEY ("git_user_id")
+  REFERENCES "git_users" ("id")
+)[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE INDEX "index_repositories_on_git_user_id" ON "repositories" ("git_user_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.7ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20210329212003"]]
+  [1m[36mTRANSACTION (2.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.9ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (38.5ms)[0m  [1m[34mSELECT pg_advisory_unlock(4869053397680650290)[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (2.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (35.6ms)[0m  [1m[35mDROP DATABASE IF EXISTS "gitbook_development"[0m
+  [1m[35m (37.7ms)[0m  [1m[35mDROP DATABASE IF EXISTS "gitbook_test"[0m
+  [1m[35m (171.4ms)[0m  [1m[35mCREATE DATABASE "gitbook_development" ENCODING = 'unicode'[0m
+  [1m[35m (78.0ms)[0m  [1m[35mCREATE DATABASE "gitbook_test" ENCODING = 'unicode'[0m
+  [1m[35mSQL (0.4ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "clients" CASCADE[0m
+  [1m[35m (8.9ms)[0m  [1m[35mCREATE TABLE "clients" ("id" bigserial primary key, "first_name" character varying, "last_name" character varying, "location" character varying, "username" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.5ms)[0m  [1m[35mDROP TABLE IF EXISTS "git_user_clients" CASCADE[0m
+  [1m[35m (6.7ms)[0m  [1m[35mCREATE TABLE "git_user_clients" ("id" bigserial primary key, "client_id" bigint NOT NULL, "git_user_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (1.9ms)[0m  [1m[35mCREATE INDEX "index_git_user_clients_on_client_id" ON "git_user_clients" ("client_id")[0m
+  [1m[35m (2.4ms)[0m  [1m[35mCREATE INDEX "index_git_user_clients_on_git_user_id" ON "git_user_clients" ("git_user_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "git_users" CASCADE[0m
+  [1m[35m (4.2ms)[0m  [1m[35mCREATE TABLE "git_users" ("id" bigserial primary key, "github_id" integer, "login" character varying, "name" character varying, "avatar_url" character varying, "bio" character varying, "location" character varying, "site_admin" boolean, "hireable" boolean, "public_repos" integer, "repos_url" character varying, "followers" integer, "following" integer, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.8ms)[0m  [1m[35mDROP TABLE IF EXISTS "repositories" CASCADE[0m
+  [1m[35m (5.1ms)[0m  [1m[35mCREATE TABLE "repositories" ("id" bigserial primary key, "git_user_id" bigint NOT NULL, "repo_id" integer, "description" character varying, "html_url" character varying, "language" character varying, "size" integer, "forks_count" integer, "commits" integer, "events_url" character varying, "last_commit_date" timestamp, "watchers" integer, "stargazers_count" integer, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (1.2ms)[0m  [1m[35mCREATE INDEX "index_repositories_on_git_user_id" ON "repositories" ("git_user_id")[0m
+  [1m[35m (2.6ms)[0m  [1m[35mALTER TABLE "git_user_clients" ADD CONSTRAINT "fk_rails_455a451382"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (1.3ms)[0m  [1m[35mALTER TABLE "git_user_clients" ADD CONSTRAINT "fk_rails_60b7d992ef"
+FOREIGN KEY ("git_user_id")
+  REFERENCES "git_users" ("id")
+[0m
+  [1m[35m (1.6ms)[0m  [1m[35mALTER TABLE "repositories" ADD CONSTRAINT "fk_rails_3d49481a60"
+FOREIGN KEY ("git_user_id")
+  REFERENCES "git_users" ("id")
+[0m
+  [1m[35m (3.3ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20210329212003)[0m
+  [1m[35m (0.6ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20210329200209),
+(20210329200423),
+(20210329201133);
+
+[0m
+  [1m[35m (3.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.8ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.4ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2021-03-31 14:36:50.132904"], ["updated_at", "2021-03-31 14:36:50.132904"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.4ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "schema_sha1"], ["value", "cde0a8dee4e0de623a18271ea7b81fa8f9378e8d"], ["created_at", "2021-03-31 14:36:50.141510"], ["updated_at", "2021-03-31 14:36:50.141510"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35mSQL (0.7ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "clients" CASCADE[0m
+  [1m[35m (8.3ms)[0m  [1m[35mCREATE TABLE "clients" ("id" bigserial primary key, "first_name" character varying, "last_name" character varying, "location" character varying, "username" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "git_user_clients" CASCADE[0m
+  [1m[35m (2.3ms)[0m  [1m[35mCREATE TABLE "git_user_clients" ("id" bigserial primary key, "client_id" bigint NOT NULL, "git_user_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (1.3ms)[0m  [1m[35mCREATE INDEX "index_git_user_clients_on_client_id" ON "git_user_clients" ("client_id")[0m
+  [1m[35m (1.1ms)[0m  [1m[35mCREATE INDEX "index_git_user_clients_on_git_user_id" ON "git_user_clients" ("git_user_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "git_users" CASCADE[0m
+  [1m[35m (3.7ms)[0m  [1m[35mCREATE TABLE "git_users" ("id" bigserial primary key, "github_id" integer, "login" character varying, "name" character varying, "avatar_url" character varying, "bio" character varying, "location" character varying, "site_admin" boolean, "hireable" boolean, "public_repos" integer, "repos_url" character varying, "followers" integer, "following" integer, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "repositories" CASCADE[0m
+  [1m[35m (3.5ms)[0m  [1m[35mCREATE TABLE "repositories" ("id" bigserial primary key, "git_user_id" bigint NOT NULL, "repo_id" integer, "description" character varying, "html_url" character varying, "language" character varying, "size" integer, "forks_count" integer, "commits" integer, "events_url" character varying, "last_commit_date" timestamp, "watchers" integer, "stargazers_count" integer, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (1.8ms)[0m  [1m[35mCREATE INDEX "index_repositories_on_git_user_id" ON "repositories" ("git_user_id")[0m
+  [1m[35m (2.2ms)[0m  [1m[35mALTER TABLE "git_user_clients" ADD CONSTRAINT "fk_rails_455a451382"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (1.7ms)[0m  [1m[35mALTER TABLE "git_user_clients" ADD CONSTRAINT "fk_rails_60b7d992ef"
+FOREIGN KEY ("git_user_id")
+  REFERENCES "git_users" ("id")
+[0m
+  [1m[35m (1.5ms)[0m  [1m[35mALTER TABLE "repositories" ADD CONSTRAINT "fk_rails_3d49481a60"
+FOREIGN KEY ("git_user_id")
+  REFERENCES "git_users" ("id")
+[0m
+  [1m[35m (2.8ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20210329212003)[0m
+  [1m[35m (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20210329200209),
+(20210329200423),
+(20210329201133);
+
+[0m
+  [1m[35m (2.6ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.5ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2021-03-31 14:36:50.246048"], ["updated_at", "2021-03-31 14:36:50.246048"]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Update (0.3ms)[0m  [1m[33mUPDATE "ar_internal_metadata" SET "value" = $1, "updated_at" = $2 WHERE "ar_internal_metadata"."key" = $3[0m  [["value", "test"], ["updated_at", "2021-03-31 14:36:50.251585"], ["key", "environment"]]
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.6ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "schema_sha1"], ["value", "cde0a8dee4e0de623a18271ea7b81fa8f9378e8d"], ["created_at", "2021-03-31 14:36:50.256653"], ["updated_at", "2021-03-31 14:36:50.256653"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started POST "/clients" for ::1 at 2021-03-31 10:50:57 -0400
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by ClientsController#create as JSON
+  Parameters: {"first_name"=>"Jamie", "last_name"=>"Lawrence-Hurt", "location"=>"Brooklyn, NY", "username"=>"ninjacat", "client"=>{"first_name"=>"Jamie", "last_name"=>"Lawrence-Hurt", "location"=>"Brooklyn, NY", "username"=>"ninjacat"}}
+[31mUnpermitted parameter: :client[0m
+  [1m[36mClient Load (2.4ms)[0m  [1m[34mSELECT "clients".* FROM "clients" WHERE "clients"."first_name" = $1 AND "clients"."last_name" = $2 AND "clients"."username" = $3 AND "clients"."location" = $4 LIMIT $5[0m  [["first_name", "Jamie"], ["last_name", "Lawrence-Hurt"], ["username", "ninjacat"], ["location", "Brooklyn, NY"], ["LIMIT", 1]]
+  ↳ app/controllers/clients_controller.rb:5:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/clients_controller.rb:5:in `create'
+  [1m[36mClient Create (1.5ms)[0m  [1m[32mINSERT INTO "clients" ("first_name", "last_name", "location", "username", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["first_name", "Jamie"], ["last_name", "Lawrence-Hurt"], ["location", "Brooklyn, NY"], ["username", "ninjacat"], ["created_at", "2021-03-31 14:50:58.050096"], ["updated_at", "2021-03-31 14:50:58.050096"]]
+  ↳ app/controllers/clients_controller.rb:5:in `create'
+  [1m[36mTRANSACTION (1.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/clients_controller.rb:5:in `create'
+[active_model_serializers]   [1m[36mGitUserClient Load (0.5ms)[0m  [1m[34mSELECT "git_user_clients".* FROM "git_user_clients" WHERE "git_user_clients"."client_id" = $1[0m  [["client_id", 1]]
+[active_model_serializers]   ↳ app/controllers/clients_controller.rb:6:in `create'
+[active_model_serializers] Rendered ClientSerializer with ActiveModelSerializers::Adapter::Attributes (19.34ms)
+Completed 200 OK in 102ms (Views: 54.6ms | ActiveRecord: 15.0ms | Allocations: 16176)
+
+
+Started POST "/git_users" for ::1 at 2021-03-31 10:51:38 -0400
+Processing by GitUsersController#create as JSON
+  Parameters: {"github_id"=>651237, "login"=>"evanlh", "name"=>"Evan Lawrence-Hurt", "avatar_url"=>"https://avatars.githubusercontent.com/u/651237?v=4", "bio"=>nil, "location"=>"Brooklyn, NY", "site_admin"=>false, "hireable"=>nil, "public_repos"=>35, "followers"=>21, "following"=>18, "git_user"=>{"github_id"=>651237, "login"=>"evanlh", "name"=>"Evan Lawrence-Hurt", "avatar_url"=>"https://avatars.githubusercontent.com/u/651237?v=4", "bio"=>nil, "location"=>"Brooklyn, NY", "site_admin"=>false, "hireable"=>nil, "public_repos"=>35, "followers"=>21, "following"=>18}}
+[31mUnpermitted parameter: :git_user[0m
+  [1m[36mGitUser Load (0.7ms)[0m  [1m[34mSELECT "git_users".* FROM "git_users" WHERE "git_users"."github_id" = $1 AND "git_users"."login" = $2 AND "git_users"."name" = $3 AND "git_users"."avatar_url" = $4 AND "git_users"."bio" IS NULL AND "git_users"."location" = $5 AND "git_users"."site_admin" = $6 AND "git_users"."hireable" IS NULL AND "git_users"."public_repos" = $7 AND "git_users"."followers" = $8 AND "git_users"."following" = $9 LIMIT $10[0m  [["github_id", 651237], ["login", "evanlh"], ["name", "Evan Lawrence-Hurt"], ["avatar_url", "https://avatars.githubusercontent.com/u/651237?v=4"], ["location", "Brooklyn, NY"], ["site_admin", false], ["public_repos", 35], ["followers", 21], ["following", 18], ["LIMIT", 1]]
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+  [1m[36mGitUser Create (1.4ms)[0m  [1m[32mINSERT INTO "git_users" ("github_id", "login", "name", "avatar_url", "location", "site_admin", "public_repos", "followers", "following", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING "id"[0m  [["github_id", 651237], ["login", "evanlh"], ["name", "Evan Lawrence-Hurt"], ["avatar_url", "https://avatars.githubusercontent.com/u/651237?v=4"], ["location", "Brooklyn, NY"], ["site_admin", false], ["public_repos", 35], ["followers", 21], ["following", 18], ["created_at", "2021-03-31 14:51:38.605457"], ["updated_at", "2021-03-31 14:51:38.605457"]]
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/git_users_controller.rb:8:in `create'
+[active_model_serializers]   [1m[36mRepository Load (0.6ms)[0m  [1m[34mSELECT "repositories".* FROM "repositories" WHERE "repositories"."git_user_id" = $1[0m  [["git_user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/git_users_controller.rb:9:in `create'
+[active_model_serializers]   [1m[36mClient Load (1.1ms)[0m  [1m[34mSELECT "clients".* FROM "clients" INNER JOIN "git_user_clients" ON "clients"."id" = "git_user_clients"."client_id" WHERE "git_user_clients"."git_user_id" = $1[0m  [["git_user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/git_users_controller.rb:9:in `create'
+[active_model_serializers] Rendered GitUserSerializer with ActiveModelSerializers::Adapter::Attributes (31.49ms)
+Completed 200 OK in 63ms (Views: 29.7ms | ActiveRecord: 11.2ms | Allocations: 16013)
+
+
