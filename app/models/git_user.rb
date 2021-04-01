@@ -13,7 +13,11 @@ class GitUser < ApplicationRecord
     end 
 
     def average_watchers
-        total_watchers/self.repositories
+        if self.total_watchers > 0
+            return self.total_watchers/self.repositories.to_f
+        else
+            return 0
+        end
     end
     
     def total_stargazers
@@ -21,7 +25,11 @@ class GitUser < ApplicationRecord
     end 
 
     def average_stargazers
-        total_stargazers/self.repositories.size
+        if self.total_stargazers > 0 
+            return self.total_stargazers/self.repositories.size.to_f
+        else
+            return 0
+        end
     end
     
     def total_commits
@@ -29,8 +37,11 @@ class GitUser < ApplicationRecord
     end 
 
     def average_commits
-        # if 
-        total_commits/self.repositories.size
+        if self.total_commits > 0
+            return self.total_commits/self.repositories.size.to_f
+        else
+            return 0
+        end
     end
     
     def total_repo_size
@@ -38,7 +49,11 @@ class GitUser < ApplicationRecord
     end 
 
     def average_repo_size
-        total_commits/self.repositories.size
+        if self.total_repo_size > 0 
+            return self.total_commits/self.repositories.size.to_f
+        else
+            return 0
+        end
     end
 
     def size_of_repos
