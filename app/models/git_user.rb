@@ -29,6 +29,7 @@ class GitUser < ApplicationRecord
     end 
 
     def average_commits
+        # if 
         total_commits/self.repositories.size
     end
     

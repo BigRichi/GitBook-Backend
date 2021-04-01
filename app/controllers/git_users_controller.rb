@@ -5,6 +5,7 @@ class GitUsersController < ApplicationController
     end
 
     def create 
+        # byebug
         @git_user = GitUser.find_or_create_by(git_user_params)
         render json: @git_user
     end 
@@ -17,7 +18,7 @@ class GitUsersController < ApplicationController
     private 
 
     def git_user_params
-        params.permit(:github_id, :login, :name, :avatar_url, :bio, :location, :site_admin, :hireable, :public_repos, :repos_url, :followers, :following)
+        params.permit(:github_id, :login, :name, :avatar_url, :bio, :location, :site_admin, :hireable, :public_repos, :repos_url, :followers, :following, :git_user)
     end
 
     def find_git_user
