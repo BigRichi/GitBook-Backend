@@ -11,7 +11,7 @@ class ClientsController < ApplicationController
     end
 
     def update 
-        @client.update(client_params)
+        @client.update(params.permit(:first_name, :last_name, :location))
         render json: @client
     end
 

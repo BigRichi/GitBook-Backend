@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  resources :git_user_clients, only: [:index, :show, :create, :delete]
+  resources :git_user_clients, only: [:index, :show, :create]
+  delete '/git_user_clients/:id', to: 'git_user_clients#delete'
   resources :repositories, only: [:index, :create, :show, :update]
   resources :git_users, only: [:show, :create, :update]
   resources :clients, only: [:create, :update]
